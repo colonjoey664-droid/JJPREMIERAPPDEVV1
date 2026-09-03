@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>J&J OS — Business Command Center</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;width:100%;min-height:100%;overflow-x:hidden}
+body{background:#f7f8f7;color:#17211c;font-family:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit;max-width:100%}
+button{cursor:pointer}
+.app{display:flex;min-height:100vh;width:100%}
+.sidebar{width:240px;flex:0 0 240px;background:#101815;color:#c8d2cd;padding:20px 14px;position:fixed;top:0;bottom:0;left:0;display:flex;flex-direction:column;z-index:20}
+.brand{display:flex;align-items:center;gap:10px;padding:8px 10px 28px;color:#fff;font-weight:800;font-size:17px}.mark{width:34px;height:34px;border-radius:10px;background:#39b878;display:grid;place-items:center;color:#082117;font-weight:900}
+.nav{display:grid;gap:4px}.nav button{border:0;background:none;color:#9eaba5;text-align:left;padding:11px 12px;border-radius:9px}.nav button.active,.nav button:hover{background:#1b2b24;color:#fff}.nav i{font-style:normal;width:26px;display:inline-block}
+.sidebottom{margin-top:auto;border-top:1px solid #26352e;padding:15px 8px;font-size:12px;color:#82928a}.online{color:#59d08f;margin-top:5px}
+main{margin-left:240px;width:calc(100% - 240px);min-width:0}header{height:72px;background:#fff;border-bottom:1px solid #e5e9e6;display:flex;align-items:center;justify-content:space-between;padding:0 30px;position:sticky;top:0;z-index:15;min-width:0}
+.search{width:320px;max-width:45vw;border:1px solid #e0e6e2;border-radius:9px;padding:10px 13px;background:#fafbfa}.headright{display:flex;align-items:center;gap:18px;font-size:13px;white-space:nowrap}.avatar{width:34px;height:34px;flex:0 0 34px;border-radius:50%;background:#dff4e8;color:#167447;display:grid;place-items:center;font-weight:800}
+.wrap{padding:30px;max-width:1450px;margin:auto;min-width:0}.top{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:25px}.eyebrow{text-transform:uppercase;letter-spacing:.1em;font-size:11px;color:#77857e;font-weight:800}.top h1{font-size:30px;margin:5px 0 4px;letter-spacing:-.03em}.sub{color:#748079;font-size:13px}
+.btn{border:0;border-radius:8px;background:#167447;color:white;padding:10px 15px;font-weight:750;white-space:nowrap}.btn.light{background:#fff;color:#26332d;border:1px solid #dde4df}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.metric{background:#fff;border:1px solid #e4e9e6;border-radius:12px;padding:18px;min-width:0}.metric .num{font-size:27px;font-weight:800;margin:7px 0}.delta{font-size:12px;color:#168052}
+.cols{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(280px,.85fr);gap:16px;margin-top:16px}.panel{background:#fff;border:1px solid #e3e8e5;border-radius:12px;overflow:hidden;min-width:0}.ph{padding:16px 18px;border-bottom:1px solid #e8ece9;display:flex;justify-content:space-between;align-items:center;gap:12px}.ph h3{margin:0;font-size:15px}.job{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:15px 18px;border-bottom:1px solid #eef1ef;min-width:0}.job:last-child{border-bottom:0}.jobtitle{font-weight:750;font-size:14px}.meta{font-size:12px;color:#7a8781;margin-top:4px}.status{display:inline-block;padding:5px 8px;border-radius:99px;background:#e8f6ee;color:#147044;font-size:10px;font-weight:800;white-space:nowrap}.status.gray{background:#eef1ef;color:#65716b}.status.amber{background:#fff3df;color:#966000}.bar{height:5px;background:#e7ece9;border-radius:99px;width:120px;margin-top:8px}.bar>span{display:block;height:100%;background:#2aa96b;border-radius:99px}
+.ai{background:#10281d;color:#fff;border-radius:12px;padding:20px;min-width:0}.ai .eyebrow{color:#78b997}.ai h2{margin:6px 0;font-size:20px}.ai input{width:100%;padding:12px;border:1px solid #315142;border-radius:8px;background:#173328;color:#fff;outline:none;margin-top:13px}.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.chip{background:#1d3b2d;border:1px solid #315442;color:#b9d7c8;border-radius:99px;padding:6px 9px;font-size:11px;cursor:pointer}
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:14px}.quick button{background:#fafcfb;border:1px solid #e3e9e5;border-radius:9px;padding:13px;text-align:left}.quick b{display:block;font-size:13px;margin-bottom:3px}
+.table{width:100%;border-collapse:collapse}.table th,.table td{padding:14px 17px;border-bottom:1px solid #edf0ee;text-align:left;font-size:13px}.table th{font-size:10px;text-transform:uppercase;color:#7d8983;letter-spacing:.08em}
+.toolbar{display:flex;gap:9px;padding:14px;border-bottom:1px solid #e7ebe8;flex-wrap:wrap}.toolbar input,.toolbar select{border:1px solid #dfe6e1;border-radius:8px;padding:9px;background:#fff;min-width:0}
+.form{padding:18px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}.field{min-width:0}.field label{font-size:11px;font-weight:800;display:block;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;padding:10px;border:1px solid #dfe5e1;border-radius:8px;background:#fff}.full{grid-column:1/-1}
+.toast{position:fixed;right:24px;bottom:24px;background:#111c17;color:#fff;padding:12px 16px;border-radius:9px;display:none;box-shadow:0 10px 35px #0002;z-index:100}
+.mobile-nav{display:none}
+
+@media(max-width:1000px){
+  .sidebar{width:76px;flex-basis:76px;padding:15px 8px}
+  .brand span,.nav button span,.sidebottom{display:none}
+  .brand{justify-content:center;padding:8px 0 24px}
+  .nav button{text-align:center;padding:11px 8px}
+  .nav i{width:auto}
+  main{margin-left:76px;width:calc(100% - 76px)}
+  header{padding:0 18px}
+  .search{width:260px;max-width:55vw}
+  .wrap{padding:22px}
+  .grid4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cols{grid-template-columns:minmax(0,1fr)}
+}
+
+@media(max-width:700px){
+  body{padding-bottom:72px}
+  .app{display:block;min-height:100vh}
+  .sidebar{display:none}
+  main{margin:0;width:100%;min-height:100vh}
+  header{height:auto;min-height:64px;padding:10px 14px;gap:10px;position:sticky;top:0}
+  .search{order:1;width:100%;max-width:none;min-width:0;height:42px;padding:9px 12px}
+  .headright{order:2;gap:8px;font-size:0}
+  .headright>span{display:none}
+  .avatar{width:38px;height:38px;flex-basis:38px}
+  .wrap{padding:18px 14px 24px;width:100%;max-width:none}
+  .top{display:block;margin-bottom:18px}
+  .top h1{font-size:26px;line-height:1.1;margin-top:6px}
+  .top .sub{font-size:13px}
+  .top>.btn{margin-top:12px;width:100%}
+  .grid4{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px!important}
+  .metric{padding:14px;border-radius:12px}
+  .metric .num{font-size:23px}
+  .cols{display:block;margin-top:12px}
+  .cols>.panel,.cols>div{margin-top:12px}
+  .cols>.panel:first-child,.cols>div:first-child{margin-top:0}
+  .ai{padding:18px;border-radius:14px}
+  .ai h2{font-size:20px;line-height:1.18}
+  .ai input{font-size:15px}
+  .chips{gap:6px}
+  .chip{font-size:11px;padding:7px 9px}
+  .ph{padding:14px}
+  .job{padding:14px;align-items:flex-start}
+  .job>div:first-child{min-width:0;flex:1}
+  .jobtitle{line-height:1.25}
+  .bar{width:90px}
+  .quick{grid-template-columns:1fr 1fr;padding:10px;gap:8px}
+  .quick button{padding:11px}
+  .table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:nowrap}
+  .table th,.table td{padding:12px 13px}
+  .toolbar{padding:10px}
+  .toolbar input,.toolbar select{flex:1;min-width:130px}
+  .form{grid-template-columns:1fr;padding:14px;gap:12px}
+  .full{grid-column:auto}
+  .toast{left:14px;right:14px;bottom:84px;text-align:center}
+  .mobile-nav{position:fixed;display:grid;grid-template-columns:repeat(5,1fr);left:0;right:0;bottom:0;height:68px;background:rgba(255,255,255,.96);border-top:1px solid #dfe6e1;z-index:50;padding:7px 6px calc(7px + env(safe-area-inset-bottom));box-shadow:0 -6px 20px #0000000d;backdrop-filter:blur(12px)}
+  .mobile-nav button{border:0;background:transparent;color:#748079;font-size:10px;font-weight:700;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:0}
+  .mobile-nav button.active{background:#e8f6ee;color:#167447}
+  .mobile-nav i{font-style:normal;font-size:18px;line-height:18px}
+}
+
+@media(max-width:390px){
+  .wrap{padding-left:12px;padding-right:12px}
+  .grid4{gap:8px}
+  .metric{padding:12px}
+  .metric .eyebrow{font-size:9px}
+  .metric .num{font-size:21px}
+  .quick{grid-template-columns:1fr}
+  .ai h2{font-size:18px}
+  .top h1{font-size:24px}
+}
+
+.modal-back{position:fixed;inset:0;background:rgba(10,15,25,.48);display:grid;place-items:center;padding:16px;z-index:1000}
+.modal{width:min(680px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:18px;box-shadow:0 25px 80px rgba(0,0,0,.25)}
+.modal .ph{padding:18px;border-bottom:1px solid #e8ebf0}
+.modal .form{padding:18px}
+@media(max-width:700px){.modal-back{align-items:end;padding:8px}.modal{max-height:92vh;border-radius:18px 18px 10px 10px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+<div class="brand"><div class="mark">J</div><span>J&J OS</span></div>
+<div class="nav" id="nav">
+<button class="active" data-p="home"><i>⌂</i><span>Command Center</span></button>
+<button data-p="customers"><i>◉</i><span>Customers</span></button>
+<button data-p="jobs"><i>✓</i><span>Jobs</span></button>
+<button data-p="schedule"><i>◷</i><span>Dispatch</span></button>
+<button data-p="estimates"><i>▤</i><span>Estimates</span></button>
+<button data-p="invoices"><i>$</i><span>Invoices</span></button>
+<button data-p="employees"><i>♙</i><span>Team</span></button>
+<button data-p="marketing"><i>↗</i><span>Growth</span></button>
+<button data-p="settings"><i>⚙</i><span>Settings</span></button>
+</div>
+<div class="sidebottom">J&J Premier Landscaping<div class="online">● AI Brain online</div></div>
+</aside>
+<main><header><input class="search" placeholder="Search anything…"><div class="headright"><span>Wednesday, Sep 2</span><div class="avatar">JC</div></div></header><div class="wrap" id="view"></div></main>
+</div>
+<div class="mobile-nav" id="mobileNav">
+<button class="active" data-p="home"><i>⌂</i><span>Home</span></button>
+<button data-p="customers"><i>◉</i><span>CRM</span></button>
+<button data-p="jobs"><i>✓</i><span>Jobs</span></button>
+<button data-p="schedule"><i>◷</i><span>Dispatch</span></button>
+<button data-p="settings"><i>⚙</i><span>More</span></button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const STORE="jj_os_v3";
+const seed={
+ customers:[
+  {id:1,name:"John Smith",phone:"(973) 555-0182",property:"Wayne, NJ",status:"Active"},
+  {id:2,name:"Maria Rodriguez",phone:"(201) 555-0124",property:"Pompton Plains, NJ",status:"Active"},
+  {id:3,name:"Maple Ridge HOA",phone:"(973) 555-0111",property:"Pequannock, NJ",status:"Commercial"},
+  {id:4,name:"Tom Wilson",phone:"(973) 555-0190",property:"Lincoln Park, NJ",status:"Lead"}
+ ],
+ jobs:[
+  {id:1,title:"Weekly Lawn Maintenance",customer:"John Smith",crew:"Crew A",time:"8:00 AM",status:"In Progress",progress:62},
+  {id:2,title:"Spring Cleanup",customer:"Maria Rodriguez",crew:"Crew B",time:"10:30 AM",status:"Scheduled",progress:0},
+  {id:3,title:"Commercial Mowing",customer:"Maple Ridge HOA",crew:"Crew A",time:"1:00 PM",status:"Scheduled",progress:0},
+  {id:4,title:"Mulch Installation",customer:"Tom Wilson",crew:"Crew C",time:"3:30 PM",status:"Estimate",progress:0}
+ ],
+ estimates:[
+  {id:1,customer:"Tom Wilson",service:"Mulch Installation",amount:1850,status:"Awaiting approval"},
+  {id:2,customer:"Maple Ridge HOA",service:"Weekly Maintenance",amount:4200,status:"Draft"},
+  {id:3,customer:"Sarah Davis",service:"Spring Cleanup",amount:780,status:"Sent"}
+ ],
+ invoices:[
+  {id:1,customer:"John Smith",amount:285,status:"Paid"},
+  {id:2,customer:"Maria Rodriguez",amount:640,status:"Due"},
+  {id:3,customer:"Maple Ridge HOA",amount:4200,status:"Due"}
+ ],
+ config:{business:"J&J Premier Landscaping LLC",industry:"Landscaping & Property Services",
+ rules:"Snow jobs over 8 inches require the snow clause. Commercial estimates require owner approval. Never schedule two crews at the same property. Always attach completion photos to commercial jobs."}
+};
+let db=JSON.parse(localStorage.getItem(STORE)||"null")||seed;
+function save(){localStorage.setItem(STORE,JSON.stringify(db))}
+function toast(x){let t=document.getElementById("toast");t.textContent=x;t.style.display="block";clearTimeout(window.__toast);window.__toast=setTimeout(()=>t.style.display="none",2200)}
+function money(n){return "$"+Number(n||0).toLocaleString()}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function layout(title,desc,body,action=""){return `<div class="top"><div><div class="eyebrow">J&J PREMIER LANDSCAPING</div><h1>${title}</h1><div class="sub">${desc}</div></div>${action}</div>${body}`}
+function modal(title,body){
+ document.body.insertAdjacentHTML("beforeend",`<div class="modal-back" id="modal"><div class="modal"><div class="ph"><h3>${title}</h3><button class="btn light" onclick="closeModal()">×</button></div>${body}</div></div>`);
+}
+function closeModal(){document.getElementById("modal")?.remove()}
+function home(){
+ const due=db.invoices.filter(x=>x.status==="Due").reduce((a,x)=>a+x.amount,0);
+ const active=db.jobs.filter(x=>x.status==="In Progress"||x.status==="Scheduled").length;
+ const pipeline=db.estimates.filter(x=>x.status!=="Won").reduce((a,x)=>a+x.amount,0);
+ return layout("Command Center","Everything happening in the business, in one view.",`
+ <div class="ai"><div class="eyebrow">BUSINESS BRAIN</div><h2>Tell J&J OS what you want done.</h2>
+ <input id="cmd" placeholder='“Follow up with every estimate over $1,000”' onkeydown="if(event.key==='Enter')runAI(this.value)">
+ <div class="chips"><span class="chip" onclick="runAI('Find leads that need follow-up')">Find follow-ups</span><span class="chip" onclick="runAI('Optimize today’s schedule')">Optimize schedule</span><span class="chip" onclick="runAI('Show jobs losing money')">Find low-margin jobs</span><span class="chip" onclick="runAI('Create a new service')">Create a service</span></div></div>
+ <div class="grid4" style="margin-top:16px">
+ <div class="metric"><div class="eyebrow">Revenue · MTD</div><div class="num">$12,480</div><div class="delta">↑ 18.4% vs last month</div></div>
+ <div class="metric"><div class="eyebrow">Jobs · Today</div><div class="num">${active}</div><div class="sub">3 crews active</div></div>
+ <div class="metric"><div class="eyebrow">Pipeline</div><div class="num">${money(pipeline)}</div><div class="sub">${db.estimates.length} estimates</div></div>
+ <div class="metric"><div class="eyebrow">Receivables</div><div class="num">${money(due)}</div><div class="sub">${db.invoices.filter(x=>x.status==="Due").length} due</div></div></div>
+ <div class="cols"><div class="panel"><div class="ph"><h3>Today's operations</h3><button class="btn light" onclick="page('jobs')">View jobs</button></div>
+ ${db.jobs.map(j=>`<div class="job"><div><div class="jobtitle">${esc(j.title)}</div><div class="meta">${esc(j.customer)} · ${esc(j.crew)} · ${esc(j.time)}</div></div><div style="text-align:right"><span class="status ${j.status==='Scheduled'?'gray':j.status==='Estimate'?'amber':''}">${j.status}</span>${j.progress?`<div class="bar"><span style="width:${j.progress}%"></span></div>`:""}</div></div>`).join("")}</div>
+ <div><div class="panel"><div class="ph"><h3>Quick actions</h3></div><div class="quick">
+ <button onclick="newEstimate()"><b>＋ New estimate</b><span class="meta">Create a proposal</span></button>
+ <button onclick="newJob()"><b>＋ New job</b><span class="meta">Schedule work</span></button>
+ <button onclick="newCustomer()"><b>＋ Customer</b><span class="meta">Add a contact</span></button>
+ <button onclick="runAI('Find leads that need follow-up')"><b>✦ AI follow-ups</b><span class="meta">Review the queue</span></button></div></div>
+ <div class="panel" style="margin-top:16px"><div class="ph"><h3>AI recommendations</h3></div>
+ <div class="job"><div><div class="jobtitle">3 estimates haven't been followed up</div><div class="meta">Potential value: $6,850</div></div><button class="btn light" onclick="runAI('Follow up on open estimates')">Act</button></div>
+ <div class="job"><div><div class="jobtitle">Crew A has 42 min of idle time</div><div class="meta">AI found a nearby open job</div></div><button class="btn light" onclick="runAI('Optimize today’s schedule')">Review</button></div></div></div></div>`)
+}
+function customers(){
+ return layout("Customers","Your CRM, properties and service history.",`<div class="panel"><div class="toolbar"><input id="q" placeholder="Search customers…" oninput="filter()"><button class="btn" onclick="newCustomer()">＋ Add customer</button></div><table class="table" id="tbl"><tr><th>Customer</th><th>Phone</th><th>Property</th><th>Status</th><th></th></tr>${db.customers.map(c=>`<tr><td><b>${esc(c.name)}</b></td><td>${esc(c.phone)}</td><td>${esc(c.property)}</td><td><span class="status">${esc(c.status)}</span></td><td><button class="btn light" onclick="customer(${c.id})">Open</button></td></tr>`).join("")}</table></div>`)
+}
+function customer(id){const c=db.customers.find(x=>x.id===id);modal("Customer profile",`<div class="form"><div class="field"><label>NAME</label><input id="cmn" value="${esc(c.name)}"></div><div class="field"><label>PHONE</label><input id="cph" value="${esc(c.phone)}"></div><div class="field full"><label>PROPERTY</label><input id="cpr" value="${esc(c.property)}"></div></div><div style="padding:18px"><button class="btn" onclick="saveCustomer(${id})">Save customer</button> <button class="btn light" onclick="closeModal()">Cancel</button></div>`)}
+function newCustomer(){modal("New customer",`<div class="form"><div class="field"><label>NAME</label><input id="cmn" placeholder="Customer name"></div><div class="field"><label>PHONE</label><input id="cph" placeholder="Phone"></div><div class="field full"><label>PROPERTY</label><input id="cpr" placeholder="City, State"></div></div><div style="padding:18px"><button class="btn" onclick="createCustomer()">Create customer</button></div>`)}
+function saveCustomer(id){let c=db.customers.find(x=>x.id===id);c.name=cmn.value;c.phone=cph.value;c.property=cpr.value;save();closeModal();page("customers");toast("Customer saved")}
+function createCustomer(){let name=cmn.value.trim();if(!name)return toast("Enter a customer name");db.customers.push({id:Date.now(),name,phone:cph.value,property:cpr.value,status:"Lead"});save();closeModal();page("customers");toast("Customer created")}
+function filter(){let q=(document.getElementById("q")?.value||"").toLowerCase();document.querySelectorAll("#tbl tr").forEach((r,i)=>{if(i)r.style.display=r.textContent.toLowerCase().includes(q)?"":"none"})}
+function jobs(){return layout("Jobs","Work orders from scheduled to completed.",`<div class="panel"><div class="toolbar"><select id="crewfilter" onchange="renderJobsFilter()"><option>All crews</option><option>Crew A</option><option>Crew B</option><option>Crew C</option></select><select id="statusfilter" onchange="renderJobsFilter()"><option>All statuses</option><option>Scheduled</option><option>In Progress</option><option>Completed</option><option>Estimate</option></select><button class="btn" onclick="newJob()">＋ New job</button></div><div id="joblist">${jobRows()}</div></div>`)}
+function jobRows(){return db.jobs.map(j=>`<div class="job"><div><div class="jobtitle">${esc(j.title)}</div><div class="meta">${esc(j.customer)} · ${esc(j.crew)} · ${esc(j.time)}</div></div><div style="text-align:right"><span class="status ${j.status==='Scheduled'?'gray':j.status==='Estimate'?'amber':''}">${j.status}</span>${j.progress?`<div class="bar"><span style="width:${j.progress}%"></span></div>`:""}<div><button class="btn light" style="margin-top:8px" onclick="job(${j.id})">Open</button></div></div></div>`).join("")}
+function renderJobsFilter(){let c=crewfilter.value,s=statusfilter.value;document.getElementById("joblist").innerHTML=db.jobs.filter(j=>(c==="All crews"||j.crew===c)&&(s==="All statuses"||j.status===s)).map(j=>`<div class="job"><div><div class="jobtitle">${esc(j.title)}</div><div class="meta">${esc(j.customer)} · ${esc(j.crew)} · ${esc(j.time)}</div></div><div style="text-align:right"><span class="status">${j.status}</span><div><button class="btn light" style="margin-top:8px" onclick="job(${j.id})">Open</button></div></div></div>`).join("")}
+function newJob(){modal("New job",`<div class="form"><div class="field"><label>JOB</label><input id="jtitle" placeholder="Weekly mowing"></div><div class="field"><label>CUSTOMER</label><input id="jcustomer" placeholder="Customer"></div><div class="field"><label>CREW</label><select id="jcrew"><option>Crew A</option><option>Crew B</option><option>Crew C</option></select></div><div class="field"><label>TIME</label><input id="jtime" placeholder="8:00 AM"></div></div><div style="padding:18px"><button class="btn" onclick="createJob()">Create job</button></div>`)}
+function createJob(){if(!jtitle.value.trim())return toast("Enter a job name");db.jobs.push({id:Date.now(),title:jtitle.value.trim(),customer:jcustomer.value||"Unassigned",crew:jcrew.value,time:jtime.value||"TBD",status:"Scheduled",progress:0});save();closeModal();page("jobs");toast("Job created")}
+function job(id){let j=db.jobs.find(x=>x.id===id);document.getElementById("view").innerHTML=layout(j.title,j.customer,`<div class="cols"><div class="panel"><div class="ph"><h3>Field workflow</h3><span class="status">${j.status}</span></div><div class="form"><div class="field"><label>CREW</label><input id="edcrew" value="${esc(j.crew)}"></div><div class="field"><label>SCHEDULE</label><input id="edtime" value="${esc(j.time)}"></div><div class="field full"><label>PROGRESS · <span id="proglabel">${j.progress}</span>%</label><input id="edprog" type="range" min="0" max="100" value="${j.progress}" oninput="proglabel.textContent=this.value"></div><div class="field full"><label>FIELD NOTES</label><textarea id="ednotes" rows="5" placeholder="Crew notes, materials, customer requests…"></textarea></div></div><div style="padding:0 18px 18px"><button class="btn" onclick="saveJob(${id})">Save job</button> <button class="btn light" onclick="completeJob(${id})">✓ Complete job</button> <button class="btn light" onclick="toast('Photo upload ready for the field app')">＋ Photos</button></div></div><div class="panel"><div class="ph"><h3>AI next action</h3></div><div style="padding:20px"><b>When this job is completed:</b><p class="sub">Generate completion summary → notify customer → attach photos → create invoice → request payment.</p><button class="btn" onclick="toast('Automation saved for this job')">Enable automation</button></div></div></div>`)}
+function saveJob(id){let j=db.jobs.find(x=>x.id===id);j.crew=edcrew.value;j.time=edtime.value;j.progress=+edprog.value;save();page("jobs");toast("Job saved")}
+function completeJob(id){let j=db.jobs.find(x=>x.id===id);j.status="Completed";j.progress=100;save();page("jobs");toast("Job completed · invoice can now be created")}
+function estimates(){return layout("Estimates","Price, present and win more work.",`<div class="panel"><div class="ph"><h3>Pipeline</h3><button class="btn" onclick="newEstimate()">＋ New estimate</button></div>${db.estimates.map(e=>`<div class="job"><div><div class="jobtitle">${esc(e.service)}</div><div class="meta">${esc(e.customer)}</div></div><div style="text-align:right"><b>${money(e.amount)}</b><br><span class="status">${esc(e.status)}</span><br><button class="btn light" style="margin-top:8px" onclick="estimate(${e.id})">Open</button></div></div>`).join("")}</div>`)}
+function newEstimate(){modal("New estimate","<div class='form'><div class='field'><label>CUSTOMER</label><input id='ecustomer' placeholder='Customer'></div><div class='field'><label>SERVICE</label><input id='eservice' placeholder='Service'></div><div class='field'><label>LABOR</label><input id='elabor' type='number' value='650' oninput='etotal()'></div><div class='field'><label>MATERIALS</label><input id='ematerial' type='number' value='900' oninput='etotal()'></div><div class='field full'><label>SCOPE</label><textarea id='escope' rows='4' placeholder='Scope of work'></textarea></div></div><div style='padding:18px'><b>Total <span id='etot'>$1,550</span></b><br><br><button class='btn' onclick='createEstimate()'>Save estimate</button></div>")}
+function etotal(){etot.textContent=money((+elabor.value||0)+(+ematerial.value||0))}
+function createEstimate(){let amount=(+elabor.value||0)+(+ematerial.value||0);if(!ecustomer.value.trim()||!eservice.value.trim())return toast("Enter customer and service");db.estimates.push({id:Date.now(),customer:ecustomer.value.trim(),service:eservice.value.trim(),amount,status:"Draft"});save();closeModal();page("estimates");toast("Estimate saved")}
+function estimate(id){let e=db.estimates.find(x=>x.id===id);modal("Estimate",`<div class="form"><div class="field"><label>CUSTOMER</label><input value="${esc(e.customer)}"></div><div class="field"><label>SERVICE</label><input value="${esc(e.service)}"></div><div class="field"><label>AMOUNT</label><input value="${money(e.amount)}"></div><div class="field"><label>STATUS</label><select id="estatus"><option ${e.status==="Draft"?"selected":""}>Draft</option><option ${e.status==="Sent"?"selected":""}>Sent</option><option ${e.status==="Awaiting approval"?"selected":""}>Awaiting approval</option><option ${e.status==="Won"?"selected":""}>Won</option><option>Lost</option></select></div></div><div style="padding:18px"><button class="btn" onclick="e.status=estatus.value;save();closeModal();page('estimates');toast('Estimate updated')">Save status</button></div>`)}
+function invoices(){return layout("Invoices","Get paid and keep cash moving.",`<div class="panel"><div class="ph"><h3>Receivables</h3><button class="btn" onclick="newInvoice()">＋ New invoice</button></div><table class="table"><tr><th>Customer</th><th>Amount</th><th>Status</th><th></th></tr>${db.invoices.map(x=>`<tr><td><b>${esc(x.customer)}</b></td><td>${money(x.amount)}</td><td><span class="status ${x.status==='Due'?'amber':''}">${x.status}</span></td><td><button class="btn light" onclick="invoice(${x.id})">Open</button></td></tr>`).join("")}</table></div>`)}
+function newInvoice(){modal("New invoice",`<div class="form"><div class="field"><label>CUSTOMER</label><input id="icustomer" placeholder="Customer"></div><div class="field"><label>AMOUNT</label><input id="iamount" type="number" placeholder="0"></div></div><div style="padding:18px"><button class="btn" onclick="createInvoice()">Create invoice</button></div>`)}
+function createInvoice(){if(!icustomer.value.trim()||!iamount.value)return toast("Enter customer and amount");db.invoices.push({id:Date.now(),customer:icustomer.value.trim(),amount:+iamount.value,status:"Due"});save();closeModal();page("invoices");toast("Invoice created")}
+function invoice(id){let x=db.invoices.find(a=>a.id===id);modal("Invoice",`<div class="form"><div class="field"><label>CUSTOMER</label><input value="${esc(x.customer)}"></div><div class="field"><label>AMOUNT</label><input value="${money(x.amount)}"></div><div class="field"><label>STATUS</label><select id="istatus"><option ${x.status==="Due"?"selected":""}>Due</option><option ${x.status==="Paid"?"selected":""}>Paid</option></select></div></div><div style="padding:18px"><button class="btn" onclick="x.status=istatus.value;save();closeModal();page('invoices');toast('Invoice updated')">Save invoice</button></div>`)}
+function schedule(){return layout("Dispatch","Put the right crew on the right job.",`<div class="grid4"><div class="metric"><div class="eyebrow">Crew A</div><div class="num">${db.jobs.filter(j=>j.crew==="Crew A").length}</div><div class="sub">jobs</div></div><div class="metric"><div class="eyebrow">Crew B</div><div class="num">${db.jobs.filter(j=>j.crew==="Crew B").length}</div><div class="sub">jobs</div></div><div class="metric"><div class="eyebrow">Crew C</div><div class="num">${db.jobs.filter(j=>j.crew==="Crew C").length}</div><div class="sub">jobs</div></div><div class="metric"><div class="eyebrow">Unassigned</div><div class="num">0</div><div class="sub">need dispatch</div></div></div><div class="panel" style="margin-top:16px"><div class="ph"><h3>AI dispatch</h3><button class="btn" onclick="runAI('Optimize today’s schedule')">✦ Optimize</button></div>${db.jobs.map(j=>`<div class="job"><div><div class="jobtitle">${esc(j.title)}</div><div class="meta">${esc(j.customer)} · ${esc(j.crew)} · ${esc(j.time)}</div></div><span class="status">${j.status}</span></div>`).join("")}</div>`)}
+function employees(){return layout("Team & permissions","Control exactly what each person can access.",`<div class="panel">${[["Joe Colon","Owner","Everything"],["Office Admin","Admin","CRM · Estimates · Invoices · Scheduling"],["Crew Manager","Manager","Jobs · Time · Photos · Materials"],["Field Technician","Field","Assigned jobs · Clock · Notes · Photos"]].map(x=>`<div class="job"><div><div class="jobtitle">${x[0]}</div><div class="meta">${x[2]}</div></div><span class="status">${x[1]}</span></div>`).join("")}<div style="padding:18px"><button class="btn" onclick="toast('Employee invite created')">＋ Invite employee</button></div></div>`)}
+function marketing(){return layout("Growth","Leads, campaigns and revenue attribution.",`<div class="panel"><div class="job"><div><div class="jobtitle">Lead capture</div><div class="meta">Lead → AI qualification → CRM</div></div><span class="status">Ready</span></div><div class="job"><div><div class="jobtitle">AI lead follow-up</div><div class="meta">Automatically chase new leads until booked or closed.</div></div><button class="btn light" onclick="runAI('Follow up with every open lead')">Run</button></div><div class="job"><div><div class="jobtitle">Campaign ROI</div><div class="meta">Connect ad spend to actual closed revenue.</div></div><span class="status gray">Setup</span></div></div>`)}
+function settings(){return layout("Business configuration","Teach the system how J&J operates.",`<div class="panel"><div class="form"><div class="field"><label>BUSINESS NAME</label><input id="biz" value="${esc(db.config.business)}"></div><div class="field"><label>INDUSTRY</label><input id="ind" value="${esc(db.config.industry)}"></div><div class="field full"><label>AI BUSINESS RULES</label><textarea id="rules" rows="6">${esc(db.config.rules)}</textarea></div></div><div style="padding:0 18px 20px"><button class="btn" onclick="db.config={business:biz.value,industry:ind.value,rules:rules.value};save();toast('Business configuration saved')">Save configuration</button></div></div>`)}
+function runAI(x){if(!x)return;document.getElementById("cmd")?.setAttribute("value",x);toast("AI action prepared: "+x)}
+function page(p){document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.p===p));document.querySelectorAll(".mobile-nav button").forEach(b=>b.classList.toggle("active",b.dataset.p===p));document.getElementById("view").innerHTML=pages[p]();window.scrollTo({top:0,behavior:"instant"})}
+const pages={home,customers,jobs,schedule,estimates,invoices,employees,marketing,settings};
+document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>page(b.dataset.p));
+document.querySelectorAll(".mobile-nav button").forEach(b=>b.onclick=()=>page(b.dataset.p));
+page("home");
+</script>
+
+</body></html>
